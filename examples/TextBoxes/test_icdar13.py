@@ -6,12 +6,15 @@ import os
 import xml.dom.minidom
 # %matplotlib inline
 
+import os
+curr_dir = os.path.abspath(os.path.dirname(__file__))
+
 plt.rcParams['figure.figsize'] = (10, 10)
 plt.rcParams['image.interpolation'] = 'nearest'
 plt.rcParams['image.cmap'] = 'gray'
 
 # Make sure that caffe is on the python path:
-caffe_root = 'your_caffe_root/'  # this file is expected to be in {caffe_root}/examples
+caffe_root = '/home/eugen/projects/deep_learning/text_boxes/'  # this file is expected to be in {caffe_root}/examples
 os.chdir(caffe_root)
 import sys
 sys.path.insert(0, 'python')
@@ -20,8 +23,8 @@ import caffe
 caffe.set_device(0)
 caffe.set_mode_gpu()
 
-model_def = 'your_caffe_root/examples/TextBoxes/deploy.prototxt'
-model_weights = 'your_caffe_root/examples/TextBoxes/VGG_text_longer_conv_300x300_iter_52000.caffemodel'
+model_def = curr_dir+'/examples/TextBoxes/deploy.prototxt'
+model_weights = curr_dir+'/models/TextBoxesCaffeModel.caffemodel'
 
 scales=((700,700),)
 # IMPORTANT: If use mutliple scales in the paper, you need an extra non-maximum superession for the results
@@ -36,7 +39,8 @@ net = caffe.Net(model_def,      # defines the structure of the model
 print(net.blobs['data'].data.shape)
 
 test_list=open('icdar_2013_dataset_root/test_list.txt')
-save_dir='your_caffe_root/data/TextBoxes/test_bb/'
+save_dir=curr_dir+'/data/TextBoxes/'
+
 for line in test_list.readlines():
 	line=line.strip()
 	image_name=line
